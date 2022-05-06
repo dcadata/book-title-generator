@@ -6,30 +6,6 @@ import spacy
 get_nlp_engine = spacy.load('en_core_web_sm')
 
 
-class Tagger:
-    def run(self):
-        self._split_subtitles()
-        self._save_tokens_and_structures()
-
-    def _split_subtitles(self):
-        self._just_titles = []
-        self._subtitles = []
-        for title in self._titles:
-            sections = [i.strip() for i in title.replace('&', 'and').strip().split(':', 1)]
-            self._just_titles.append(sections[0])
-            if len(sections) > 1:
-                self._subtitles.append(sections[1])
-
-    def _save_tokens_and_structures(self):
-        _save_tokens_and_structures(self._just_titles, 'titles')
-        _save_tokens_and_structures(self._subtitles, 'subtitles')
-
-    @property
-    def _titles(self) -> list:
-        titles = open('data/titles.txt').read().strip().splitlines()
-        return titles
-
-
 class BookTitleGenerator:
     def __init__(self):
         self._add_spaces = lambda data: [f' {i}' if i.isalnum() else i for i in data]
@@ -47,6 +23,20 @@ class BookTitleGenerator:
         reconstituted_title = ': '.join(tuple(map(lambda x: ''.join(self._add_spaces(x)).strip(), (
             title_components, subtitle_components))))
         return reconstituted_title
+
+
+def _split_subtitles() -> tuple[list, list]:
+    just_titles = []
+    subtitles = []
+    titles = open('data/titles.txt').read().strip().splitlines()
+
+    for title in titles:
+        sections = [i.strip() for i in title.replace('&', 'and').strip().split(':', 1)]
+        just_titles.append(sections[0])
+        if len(sections) > 1:
+            subtitles.append(sections[1])
+
+    return just_titles, subtitles
 
 
 def _save_tokens_and_structures(titles_or_subtitles: list, label: str):
@@ -67,6 +57,12 @@ def _save_tokens_and_structures(titles_or_subtitles: list, label: str):
 
     structures.to_csv(f'data/structures_{label}.csv', index=False)
     tokens.to_csv(f'data/tokens_{label}.csv', index=False)
+
+
+def tag_and_save():
+    just_titles, subtitles = _split_subtitles()
+    _save_tokens_and_structures(just_titles, 'titles')
+    _save_tokens_and_structures(subtitles, 'subtitles')
 
 
 def _read_structures_from_disk(label: str) -> list:
