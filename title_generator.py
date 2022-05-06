@@ -9,8 +9,8 @@ get_nlp_engine = spacy.load('en_core_web_sm')
 class BookTitleGenerator:
     def load(self):
         self._get_subtitles()
-        self._get_title_token_bank_and_structures()
-        self._get_subtitle_token_bank_and_structures()
+        self._get_title_tokens_and_structures()
+        self._get_subtitle_tokens_and_structures()
 
     def get_reconstituted_title(self) -> str:
         titles = [
@@ -37,11 +37,11 @@ class BookTitleGenerator:
             if len(sections) > 1:
                 self._subtitles.append(sections[1])
 
-    def _get_title_token_bank_and_structures(self):
-        self._title_structures, self._title_tokens = _get_token_bank_and_structures(self._just_titles)
+    def _get_title_tokens_and_structures(self):
+        self._title_structures, self._title_tokens = _get_tokens_and_structures(self._just_titles)
 
-    def _get_subtitle_token_bank_and_structures(self):
-        self._subtitle_structures, self._subtitle_tokens = _get_token_bank_and_structures(self._subtitles)
+    def _get_subtitle_tokens_and_structures(self):
+        self._subtitle_structures, self._subtitle_tokens = _get_tokens_and_structures(self._subtitles)
 
     @property
     def _titles(self) -> list:
@@ -49,7 +49,7 @@ class BookTitleGenerator:
         return titles
 
 
-def _get_token_bank_and_structures(titles_or_subtitles: list) -> tuple:
+def _get_tokens_and_structures(titles_or_subtitles: list) -> tuple:
     token_bank = []
     structures = []
 
