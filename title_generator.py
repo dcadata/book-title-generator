@@ -45,7 +45,7 @@ class BookTitleGenerator:
 
     @property
     def _titles(self) -> list:
-        titles = open('book_titles.txt').read().strip().splitlines()
+        titles = open('titles.txt').read().strip().splitlines()
         return titles
 
 
