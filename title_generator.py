@@ -38,10 +38,10 @@ class BookTitleGenerator:
                 self._subtitles.append(sections[1])
 
     def _get_title_tokens_and_structures(self):
-        self._title_structures, self._title_tokens = _get_tokens_and_structures(self._just_titles)
+        self._title_tokens, self._title_structures = _get_tokens_and_structures(self._just_titles)
 
     def _get_subtitle_tokens_and_structures(self):
-        self._subtitle_structures, self._subtitle_tokens = _get_tokens_and_structures(self._subtitles)
+        self._subtitle_tokens, self._subtitle_structures = _get_tokens_and_structures(self._subtitles)
 
     @property
     def _titles(self) -> list:
@@ -63,4 +63,4 @@ def _get_tokens_and_structures(titles_or_subtitles: list) -> tuple:
     tokens = pd.DataFrame(token_bank, columns=['text', 'pos'])
     tokens = tokens[tokens.pos != 'PUNCT'].copy()
     tokens.text = tokens.text.apply(lambda x: x.upper())
-    return structures, tokens
+    return tokens, structures
