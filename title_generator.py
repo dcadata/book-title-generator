@@ -42,14 +42,8 @@ class BookTitleGenerator:
         self._subtitle_structures = _read_structures_from_disk('subtitles')
 
     def get_reconstituted_title(self) -> str:
-        title_components = [
-            random.choice(self._title_tokens[self._title_tokens.pos == pos].text.values)
-            for pos in random.choice(self._title_structures)
-        ]
-        subtitle_components = [
-            random.choice(self._subtitle_tokens[self._subtitle_tokens.pos == pos].text.values)
-            for pos in random.choice(self._subtitle_structures)
-        ]
+        title_components = self._choose_random(self._title_tokens, self._title_structures)
+        subtitle_components = self._choose_random(self._subtitle_tokens, self._subtitle_structures)
         reconstituted_title = ': '.join(tuple(map(lambda x: ''.join(self._add_spaces(x)).strip(), (
             title_components, subtitle_components))))
         return reconstituted_title
