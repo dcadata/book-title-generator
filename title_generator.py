@@ -12,7 +12,7 @@ class BookTitleGenerator:
         self._get_title_token_bank_and_structures()
         self._get_subtitle_token_bank_and_structures()
 
-    def get_reconstituted_title(self):
+    def get_reconstituted_title(self) -> str:
         titles = [
             random.choice(self._title_tokens[self._title_tokens.pos == pos].text.values)
             for pos in random.choice(self._title_structures)
@@ -44,7 +44,7 @@ class BookTitleGenerator:
         self._subtitle_structures, self._subtitle_tokens = _get_token_bank_and_structures(self._subtitles)
 
     @property
-    def _titles(self):
+    def _titles(self) -> list:
         titles = open('book_titles.txt').read().strip().splitlines()
         return titles
 
