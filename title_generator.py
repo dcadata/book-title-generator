@@ -9,7 +9,7 @@ get_nlp_engine = spacy.load('en_core_web_sm')
 class Tagger:
     def run(self):
         self._split_subtitles()
-        self._get_tokens_and_structures()
+        self._save_tokens_and_structures()
 
     def _split_subtitles(self):
         self._just_titles = []
@@ -20,9 +20,9 @@ class Tagger:
             if len(sections) > 1:
                 self._subtitles.append(sections[1])
 
-    def _get_tokens_and_structures(self):
-        _get_tokens_and_structures(self._just_titles, 'titles')
-        _get_tokens_and_structures(self._subtitles, 'subtitles')
+    def _save_tokens_and_structures(self):
+        _save_tokens_and_structures(self._just_titles, 'titles')
+        _save_tokens_and_structures(self._subtitles, 'subtitles')
 
     @property
     def _titles(self) -> list:
@@ -55,7 +55,7 @@ class BookTitleGenerator:
         return reconstituted_title
 
 
-def _get_tokens_and_structures(titles_or_subtitles: list, label: str):
+def _save_tokens_and_structures(titles_or_subtitles: list, label: str):
     token_bank = []
     structures = []
 
@@ -71,8 +71,8 @@ def _get_tokens_and_structures(titles_or_subtitles: list, label: str):
     tokens = tokens[tokens.pos != 'PUNCT'].copy()
     tokens.text = tokens.text.apply(lambda x: x.upper())
 
-    tokens.to_csv(f'data/tokens_{label}.csv', index=False)
     structures.to_csv(f'data/structures_{label}.csv', index=False)
+    tokens.to_csv(f'data/tokens_{label}.csv', index=False)
 
 
 def _read_structures_from_disk(label: str) -> list:
